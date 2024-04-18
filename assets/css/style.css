@@ -227,7 +227,6 @@ h6 {
 
 .nav-link:hover {
   font-size: 133%;
-  color: red;
 }
 
 .navbar a:hover,
@@ -306,6 +305,7 @@ h6 {
 /**
 * Mobile Navigation 
 */
+
 .mobile-nav-toggle {
   color: #fff;
   font-size: 28px;

@@ -45,22 +45,33 @@
   </section><!-- End Hero -->
 
   <!-- ======= Header ======= -->
+  <!-- .navbar -->
+
   <header id="header" class="d-flex align-items-center ">
     <div class="container-fluid d-flex align-items-center justify-content-lg-around">
 
       <nav id="navbar" class="navbar order-last order-lg-0">
+
         <ul>
-          <li><a class="nav-link scrollto" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#new-titles">Estrenos</a></li>
-          <li><a class="nav-link scrollto" href="#clasics">Clásicos</a></li>
+          <li><a class="nav-link scrollto" href="#hero">Inicio</a></li>
           <li><a class="nav-link scrollto" href="#about">Quienes Somos</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Pelis
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#new-titles">Estrenos</a></li>
+              <li><a class="dropdown-item" href="#documentary">Documentales</a></li>
+              <li><a class="dropdown-item" href="#animation">Animadas</a></li>
+            </ul>
           </li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contacto</a></li>
+
+        </ul>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-
+      </nav>
 
     </div>
   </header><!-- End Header -->
@@ -170,6 +181,7 @@
 
     <section id="movies">
 
+      <!-- SECCION ESTRENOS -->
       <div class="section-title movies-titles">
         <h2 id="new-titles">Estrenos</h2>
       </div>
@@ -177,13 +189,25 @@
         <!-- Las tarjetas de películas generadas dinámicamente se insertarán aquí -->
       </div>
 
+      <!-- SECCION DOCUMENTALES -->
       <div class="section-title movies-titles">
-        <h2 id="clasics">Clásicos</h2>
+        <h2 id="documentary">Documentales</h2>
+      </div>
+      <div class="row m-2" id="documentary-container">
+        <!-- Las tarjetas de películas generadas dinámicamente se insertarán aquí -->
+      </div>
+
+      <!-- SECCION ANIMADAS -->
+      <div class="section-title movies-titles">
+        <h2 id="animation">Animadas</h2>
+      </div>
+      <div class="row m-2" id="animated-container">
+        <!-- Las tarjetas de películas generadas dinámicamente se insertarán aquí -->
       </div>
 
 
 
-      </div>
+
 
     </section>
 
