@@ -1,5 +1,6 @@
 // Lugar donde deseas mostrar las tarjetas de películas
 const movieContainer = document.getElementById("movie-container");
+const MAX_RESULTS = 12; // Número máximo de películas a mostrar
 
 const options = {
   method: "GET",
@@ -22,12 +23,13 @@ fetch(
       const cardColumn = document.createElement("div");
       cardColumn.classList.add("col-lg-3", "col-md-4", "col-sm-6", "mb-4");
 
-      // Crear elemento de tarjeta
-      const card = document.createElement("div");
-      card.classList.add("card", "booking-card", "v-2", "rounded-bottom");
+      if (movieContainer.children.length < MAX_RESULTS) {
+        // Crear elemento de tarjeta
+        const card = document.createElement("div");
+        card.classList.add("card", "booking-card", "v-2", "rounded-bottom");
 
-      // Construir contenido de la tarjeta
-      card.innerHTML = `
+        // Construir contenido de la tarjeta
+        card.innerHTML = `
         <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
           <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="img-thumbnail card-img">
         </div>
@@ -57,9 +59,11 @@ fetch(
         </div>
       `;
 
-      // Agregar la tarjeta al contenedor de películas
-      cardColumn.appendChild(card);
-      document.getElementById("movie-container").appendChild(cardColumn);
+        // Agregar la tarjeta al contenedor de películas
+        cardColumn.appendChild(card);
+        document.getElementById("movie-container").appendChild(cardColumn);
+      }
     });
   })
+
   .catch((err) => console.error(err));
