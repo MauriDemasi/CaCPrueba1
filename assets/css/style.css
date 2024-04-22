@@ -227,7 +227,6 @@ h6 {
 
 .nav-link:hover {
   font-size: 133%;
-  color: red;
 }
 
 .navbar a:hover,
@@ -306,6 +305,7 @@ h6 {
 /**
 * Mobile Navigation 
 */
+
 .mobile-nav-toggle {
   color: #fff;
   font-size: 28px;
@@ -722,6 +722,20 @@ section {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/*-------------------------------------------------------------
+# Page Movie Details
+--------------------------------------------------------------*/
+.hero-details-movie {
+  background: url("../img/portfolio/portfolio-details-1.jpg") no-repeat center
+    center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding: 65px 0;
+  height: 50em;
 }
 
 /*--------------------------------------------------------------
