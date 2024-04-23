@@ -151,6 +151,8 @@ function getResultsByGenre(genreId, containerId) {
         const handleClick = () => {
           // Llamamos a la función getMovieById con el id de la película seleccionada
           getMovieById(movie.id);
+
+          // Mostrar los detalles de la película en el modal
         };
 
         idMovie = movie.id;
@@ -200,7 +202,7 @@ function getResultsByGenre(genreId, containerId) {
           // Agregar la tarjeta al contenedor de películas
           cardColumn.appendChild(card);
           documentaryContainer.appendChild(cardColumn);
-          getTrailerByTitle(movie.title);
+          //getTrailerByTitle(movie.title);
         }
       });
     })
