@@ -151,9 +151,7 @@ function getResultsByGenre(genreId, containerId) {
         const handleClick = () => {
           // Llamamos a la función getMovieById con el id de la película seleccionada
           getMovieById(movie.id);
-          // Mostrar los detalles de la película en el modal
-          const modalTitle = document.getElementById("modalTitle");
-          const modalBody = document.getElementById("modalBody");
+
 
           modalTitle.textContent = movie.title;
           modalTitle.textContent = movie.title;
