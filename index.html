@@ -45,21 +45,31 @@
   </section><!-- End Hero -->
 
   <!-- ======= Header ======= -->
+  <!-- .navbar -->
+
   <header id="header" class="d-flex align-items-center ">
     <div class="container-fluid d-flex align-items-center justify-content-lg-around">
 
       <nav id="navbar" class="navbar order-last order-lg-0">
+
         <ul>
-          <li><a class="nav-link scrollto" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#hero">Inicio</a></li>
           <li><a class="nav-link scrollto" href="#about">Quienes Somos</a></li>
-          <li><a class="nav-link scrollto" href="#new-titles">Estrenos</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Pelis
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#new-titles">Estrenos</a></li>
+              <li><a class="dropdown-item" href="#documentary">Documentales</a></li>
+              <li><a class="dropdown-item" href="#animation">Animadas</a></li>
+            </ul>
           </li>
-          <li><a class="nav-link scrollto" href="#contact">Contactos</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-
+      </nav>
 
     </div>
   </header><!-- End Header -->
@@ -169,6 +179,7 @@
 
     <section id="movies">
 
+      <!-- SECCION ESTRENOS -->
       <div class="section-title movies-titles">
         <h2 id="new-titles">Estrenos</h2>
       </div>
@@ -176,18 +187,49 @@
         <!-- Las tarjetas de películas generadas dinámicamente se insertarán aquí -->
       </div>
 
+      <!-- SECCION DOCUMENTALES -->
       <div class="section-title movies-titles">
-        <h2 id="new-titles">Clásicos</h2>
+        <h2 id="documentary">Documentales</h2>
+      </div>
+      <div class="row m-2" id="documentary-container">
+        <!-- Las tarjetas de películas generadas dinámicamente se insertarán aquí -->
       </div>
 
-
-
+      <!-- SECCION ANIMADAS -->
+      <div class="section-title movies-titles">
+        <h2 id="animation">Animadas</h2>
       </div>
-
+      <div class="row m-2" id="animated-container">
+        <!-- Las tarjetas de películas generadas dinámicamente se insertarán aquí -->
+      </div>
     </section>
 
+    <!-- ======= Modal Details Movie ======= -->
+    <div id="movieModal" class="modal">
+      <div class="modal-dialog modal-xl"> <!--1 opcion-->
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title" id="modalTitle"></h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
 
-    
+          <!-- Modal Body -->
+          <div class="modal-body" id="modalBody">
+            <!-- Aquí se mostrarán los  detalles de la película -->
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
       <div class="container">
@@ -198,34 +240,34 @@
         </div>
 
 
-          <div class="col-lg-8 mt-5 mt-lg-0">
+        <div class="col-lg-8 mt-5 mt-lg-0">
 
-            <form action="" method="post" role="form" class="email-form">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-                </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                </div>
+          <form action="" method="post" role="form" class="email-form">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
               </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+              <div class="col-md-6 form-group mt-3 mt-md-0">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
               </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-
-          </div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group mt-3">
+              <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+            </div>
+            <div class="my-3">
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">Your message has been sent. Thank you!</div>
+            </div>
+            <div class="text-center"><button type="submit">Send Message</button></div>
+          </form>
 
         </div>
+
+      </div>
 
       </div>
     </section><!-- End Contact Section -->
@@ -290,6 +332,8 @@
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Custom Js Scripts-->
   <script src="assets/js/app.js"></script>
 
   <!-- Template Main JS File -->
