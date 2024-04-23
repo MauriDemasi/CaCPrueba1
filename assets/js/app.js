@@ -151,8 +151,58 @@ function getResultsByGenre(genreId, containerId) {
         const handleClick = () => {
           // Llamamos a la función getMovieById con el id de la película seleccionada
           getMovieById(movie.id);
-        };
+          // Mostrar los detalles de la película en el modal
+          const modalTitle = document.getElementById("modalTitle");
+          const modalBody = document.getElementById("modalBody");
 
+          modalTitle.textContent = movie.title;
+          modalTitle.textContent = movie.title;
+          modalBody.innerHTML = `
+          <div class="col">
+            <div class="row">
+  
+            <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-4" data-mdb-ripple-color="light">
+              <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img">
+            </div> 
+          
+            <!-- Segundo elemento -->
+            <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-8" data-mdb-ripple-color="light">
+              <div class="ratio ratio-16x9" id="trailer-container">
+              <iframe width="100%" height="100%" src="assets/video/404.mp4" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </div>
+  
+          </div>
+        
+          <div class="card-body">
+          <ul class="list-unstyled list-inline mb-2">
+            <li class="list-inline-item me-0">
+              <i class="fas fa-star text-warning fa-xs"> </i>
+            </li>
+            <li class="list-inline-item me-0">
+              <i class="fas fa-star text-warning fa-xs"> </i>
+            </li>
+            <li class="list-inline-item me-0">
+              <i class="fas fa-star text-warning fa-xs"> </i>
+            </li>
+            <li class="list-inline-item me-0">
+              <i class="fas fa-star text-warning fa-xs"> </i>
+            </li>
+            <li class="list-inline-item me-0">
+              <i class="fas fa-star text-warning fa-xs"> </i>
+            </li>
+          </ul>
+          <p class="card-text overview">
+            ${movie.overview}
+          </p>
+          `;
+
+          // Mostrar el modal
+          const movieModal = new bootstrap.Modal(
+            document.getElementById("movieModal")
+          );
+          movieModal.show();
+        };
         idMovie = movie.id;
 
         const cardColumn = document.createElement("div");
@@ -200,7 +250,7 @@ function getResultsByGenre(genreId, containerId) {
           // Agregar la tarjeta al contenedor de películas
           cardColumn.appendChild(card);
           documentaryContainer.appendChild(cardColumn);
-          getTrailerByTitle(movie.title);
+          //getTrailerByTitle(movie.title);
         }
       });
     })
