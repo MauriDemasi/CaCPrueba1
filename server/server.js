@@ -20,8 +20,10 @@ app.get("/trailer/:title", async (req, res) => {
     // Envía la URL del trailer como respuesta
     if (result && result.url) {
       res.json({ url: result.url });
+      console.log(result.url);
     } else {
       res.status(404).json({ error: "Trailer not found" });
+      console.log("Trailer not found");
     }
   } catch (error) {
     console.error(error);
