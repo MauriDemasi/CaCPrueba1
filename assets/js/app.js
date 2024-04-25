@@ -17,6 +17,118 @@ let idMovie;
 // Variable para almacenar el titulo de la pelicula y usar este valor como parametro para la funcion que busca por youtube
 let movieTitle;
 
+// Fetch de datos y generación de tarjetas HTML
+fetch(
+  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc",
+  options
+)
+  .then((response) => response.json())
+  .then((data) => {
+    // Eliminar los slides existentes
+    const swiper = new Swiper('.mySwiper', {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      freeMode: true,
+      sticky: true,
+      navigation,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        575: {
+          slidesPerView: 2,
+        },
+        975: {
+          slidesPerView: 3,
+        },
+        1375: {
+          slidesPerView: 4,
+        },
+        1875: {
+          slidesPerView: 5,
+        },
+      }
+
+    });
+
+    // Limpiar slides existentes
+    swiper.removeAllSlides();
+
+    // Utilizar map para crear un array de HTML para cada película
+    const slidesHTML = data.results.map((movie) => {
+      return `
+            <div class="swiper-slide">
+              <div class="card booking-card rounded-bottom">
+                <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                  <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="img-thumbnail card-img">
+                </div>
+                <div class="card-body">
+                  <h4 class="card-title font-weight-bold movie-title"><a>${movie.title}</a></h4>
+                  <ul class="list-unstyled list-inline mb-2">
+                    <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                    <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                    <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                    <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                    <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                  </ul>
+                  <p class="card-text overview">${movie.overview}</p>
+                  <hr class="my-4" />
+                </div>
+              </div>
+            </div>
+          `;
+    });
+
+    // Agregar los nuevos slides al contenedor de Swiper
+    slidesHTML.forEach(html => {
+      swiper.appendSlide(html);
+    });
+
+    // Agregar el evento de clic a las tarjetas
+    const cards = document.querySelectorAll('.card.booking-card');
+    cards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        // Lógica para mostrar el modal
+        const modalTitle = document.getElementById("modalTitle");
+        const modalBody = document.getElementById("modalBody");
+
+        modalTitle.textContent = data.results[index].title;
+        modalBody.innerHTML = `
+          <div class="col">
+            <div class="row">
+              <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-4" data-mdb-ripple-color="light">
+                <img src="https://image.tmdb.org/t/p/w500${data.results[index].poster_path}" class="card-img">
+              </div> 
+              <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-8" data-mdb-ripple-color="light">
+                <div class="ratio ratio-16x9" id="trailer-container">
+                  <iframe width="100%" height="100%" src="assets/video/404.mp4" frameborder="0" allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled list-inline mb-2">
+                <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+              </ul>
+              <p class="card-text overview">${data.results[index].overview}</p>
+            </div>
+          </div>
+        `;
+
+        const movieModal = new bootstrap.Modal(
+          document.getElementById("movieModal")
+        );
+        movieModal.show();
+      });
+    });
+  })
+  .catch((err) => console.error(err));
+
+{/* 
 // Hacer la solicitud a la API para obtener las películas estreno
 fetch(
   "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc",
@@ -134,6 +246,7 @@ fetch(
     });
   })
   .catch((err) => console.error(err));
+  */}
 
 //Funcion para hacer los fetch por categorias y renderizar las card en su respectivo contenedor
 function getResultsByGenre(genreId, containerId) {
@@ -269,7 +382,7 @@ function getMovieById(idMovie) {
     options
   )
     .then((response) => response.json())
-    .then((data) => {})
+    .then((data) => { })
     .catch((error) => {
       console.error("Error fetching movie:", error);
     });
