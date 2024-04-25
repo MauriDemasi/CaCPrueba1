@@ -7,215 +7,69 @@ const options = {
   },
 };
 
-// Lugar donde deseas mostrar las tarjetas de películas
-const movieContainer = document.getElementById("movie-container");
-const MAX_RESULTS = 12; // Número máximo de películas a mostrar
+const MAX_RESULTS = 12;
+const trailerUrls = [];
 
-/// Variable para guardar el idMovie para luego buscar película por este parametro
-let idMovie;
-
-// Variable para almacenar el titulo de la pelicula y usar este valor como parametro para la funcion que busca por youtube
-let movieTitle;
-
-// Hacer la solicitud a la API para obtener las películas estreno
-fetch(
-  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc",
-  options
-)
-  .then((response) => response.json())
-  .then((data) => {
-    // Iterar sobre los resultados de la API
-    data.results.forEach((movie) => {
-      // Aquí creamos una función anónima que se ejecutará cuando se haga clic en una tarjeta
-      const handleClick = () => {
-        // Llamamos a la función getMovieById con el id de la película seleccionada
-        getMovieById(movie.id);
-        // Mostrar los detalles de la película en el modal
-        const modalTitle = document.getElementById("modalTitle");
-        const modalBody = document.getElementById("modalBody");
-
-        modalTitle.textContent = movie.title;
-        modalTitle.textContent = movie.title;
-        modalBody.innerHTML = `
-        <div class="col">
-          <div class="row">
-
-          <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-4" data-mdb-ripple-color="light">
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img">
-          </div> 
-        
-          <!-- Segundo elemento -->
-          <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-8" data-mdb-ripple-color="light">
-            <div class="ratio ratio-16x9" id="trailer-container">
-            <iframe width="100%" height="100%" src="assets/video/404.mp4" frameborder="0" allowfullscreen></iframe>
-            </div>
-          </div>
-
-        </div>
-      
-        <div class="card-body">
-        <ul class="list-unstyled list-inline mb-2">
-          <li class="list-inline-item me-0">
-            <i class="fas fa-star text-warning fa-xs"> </i>
-          </li>
-          <li class="list-inline-item me-0">
-            <i class="fas fa-star text-warning fa-xs"> </i>
-          </li>
-          <li class="list-inline-item me-0">
-            <i class="fas fa-star text-warning fa-xs"> </i>
-          </li>
-          <li class="list-inline-item me-0">
-            <i class="fas fa-star text-warning fa-xs"> </i>
-          </li>
-          <li class="list-inline-item me-0">
-            <i class="fas fa-star text-warning fa-xs"> </i>
-          </li>
-        </ul>
-        <p class="card-text overview">
-          ${movie.overview}
-        </p>
-        `;
-
-        // Mostrar el modal
-        const movieModal = new bootstrap.Modal(
-          document.getElementById("movieModal")
-        );
-        movieModal.show();
-      };
-
-      idMovie = movie.id;
-      const cardColumn = document.createElement("div");
-      cardColumn.classList.add("col-lg-3", "col-md-4", "col-sm-6", "mb-4");
-
-      if (movieContainer.children.length < MAX_RESULTS) {
-        // Crear elemento de tarjeta
-        const card = document.createElement("div");
-        card.classList.add("card", "booking-card", "v-2", "rounded-bottom");
-
-        // Agregar el evento de clic a la tarjeta
-        card.addEventListener("click", handleClick);
-
-        // Construir contenido de la tarjeta
-        card.innerHTML = `
-        <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
-          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="img-thumbnail card-img">
-        </div>
-        <div class="card-body">
-          <h4 class="card-title font-weight-bold movie-title"><a>${movie.title}</a></h4>
-          <ul class="list-unstyled list-inline mb-2">
-            <li class="list-inline-item me-0">
-              <i class="fas fa-star text-warning fa-xs"> </i>
-            </li>
-            <li class="list-inline-item me-0">
-              <i class="fas fa-star text-warning fa-xs"> </i>
-            </li>
-            <li class="list-inline-item me-0">
-              <i class="fas fa-star text-warning fa-xs"> </i>
-            </li>
-            <li class="list-inline-item me-0">
-              <i class="fas fa-star text-warning fa-xs"> </i>
-            </li>
-            <li class="list-inline-item me-0">
-              <i class="fas fa-star text-warning fa-xs"> </i>
-            </li>
-          </ul>
-          <p class="card-text overview">
-            ${movie.overview}
-          </p>
-          <hr class="my-4" />
-        </div>
-      `;
-
-        // Agregar la tarjeta al contenedor de películas
-        cardColumn.appendChild(card);
-        document.getElementById("movie-container").appendChild(cardColumn);
-        //getTrailerByTitle(movie.title);
-      }
-    });
-  })
-  .catch((err) => console.error(err));
-
-//Funcion para hacer los fetch por categorias y renderizar las card en su respectivo contenedor
-function getResultsByGenre(genreId, containerId) {
-  const documentaryContainer = document.getElementById(containerId);
-
-  fetch(
-    `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=${genreId}`,
-    options
-  )
+function fetchNewMovies(apiUrl, containerId) {
+  fetch(apiUrl, options)
     .then((response) => response.json())
     .then((data) => {
-      // Iterar sobre los resultados de la API
-      data.results.forEach((movie) => {
-        // Aquí creamos una función anónima que se ejecutará cuando se haga clic en una tarjeta
-        const handleClick = () => {
-          // Llamamos a la función getMovieById con el id de la película seleccionada
-          getMovieById(movie.id);
+      const movieContainer = document.getElementById(containerId);
+      const cardColumn = document.createElement("div");
+      cardColumn.classList.add(
+        "row",
+        "row-cols-1",
+        "row-cols-md-2",
+        "row-cols-lg-4"
+      );
 
-          // Mostrar los detalles de la película en el modal
+      data.results.forEach((movie, index) => {
+        const handleClick = () => {
+          getMovieById(movie.id);
+          const trailerIndex = trailerUrls.findIndex(
+            (item) => item.title === movie.title
+          );
+          if (trailerIndex !== -1) {
+            const trailerUrl = trailerUrls[trailerIndex].url;
+            showTrailer(trailerUrl);
+          } else {
+            getTrailerByTitle(movie.title);
+          }
+          showModal(movie);
         };
 
-        idMovie = movie.id;
-
-        const cardColumn = document.createElement("div");
-        cardColumn.classList.add("col-lg-3", "col-md-4", "col-sm-6", "mb-4");
-
-        if (documentaryContainer.children.length < MAX_RESULTS) {
-          // Crear elemento de tarjeta
+        if (index < MAX_RESULTS) {
           const card = document.createElement("div");
-          card.classList.add("card", "booking-card", "v-2", "rounded-bottom");
+          card.classList.add("col", "mb-4");
 
-          // Agregar el evento de clic al contenedor de la tarjeta
-          card.addEventListener("click", handleClick);
-
-          // Construir contenido de la tarjeta
           card.innerHTML = `
-            <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
-              <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="img-thumbnail card-img">
-            </div>
-            <div class="card-body">
-              <h4 class="card-title font-weight-bold movie-title"><a>${movie.title}</a></h4>
-              <ul class="list-unstyled list-inline mb-2">
-                <li class="list-inline-item me-0">
-                  <i class="fas fa-star text-warning fa-xs"> </i>
-                </li>
-                <li class="list-inline-item me-0">
-                  <i class="fas fa-star text-warning fa-xs"> </i>
-                </li>
-                <li class="list-inline-item me-0">
-                  <i class="fas fa-star text-warning fa-xs"> </i>
-                </li>
-                <li class="list-inline-item me-0">
-                  <i class="fas fa-star text-warning fa-xs"> </i>
-                </li>
-                <li class="list-inline-item me-0">
-                  <i class="fas fa-star text-warning fa-xs"> </i>
-                </li>
-              </ul>
-              <p class="card-text overview">
-                ${movie.overview}
-              </p>
-              <hr class="my-4" />
-            </div>
-          `;
+            <div class="card booking-card v-2 rounded-bottom">
+              <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="img-thumbnail card-img">
+              </div>
+              <div class="card-body">
+                <h4 class="card-title font-weight-bold movie-title"><a>${movie.title}</a></h4>
+                <ul class="list-unstyled list-inline mb-2">
+                  <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                  <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                  <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                  <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                  <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+                </ul>
+                <p class="card-text overview">${movie.overview}</p>
+                <hr class="my-4" />
+              </div>
+            </div>`;
 
-          // Agregar la tarjeta al contenedor de películas
+          card.addEventListener("click", handleClick);
           cardColumn.appendChild(card);
-          documentaryContainer.appendChild(cardColumn);
-          //getTrailerByTitle(movie.title);
         }
       });
-    })
-    .catch((error) => {
-      console.error("Error fetching documentaries:", error);
-    });
-}
-//Documentales -->
-getResultsByGenre(99, "documentary-container");
-//Animadas -->
-getResultsByGenre(16, "animated-container");
 
-//Funcion para buscar una pelicula por su id
+      movieContainer.appendChild(cardColumn);
+    })
+    .catch((err) => console.error(err));
+}
 
 function getMovieById(idMovie) {
   fetch(
@@ -229,44 +83,128 @@ function getMovieById(idMovie) {
     });
 }
 
-// Función para obtener el trailer de una película por su título
-// async function getTrailerByTitle(movieTitle) {
-//   const response = await fetch(
-//     `http://localhost:3000/trailer/${encodeURIComponent(movieTitle)}+trailer`
-//   );
-//   const data = await response.json();
+async function getTrailerByTitle(movieTitle) {
+  const response = await fetch(
+    `http://localhost:3000/trailer/${encodeURIComponent(movieTitle)}+trailer`
+  );
+  const data = await response.json();
 
-//   if (response.ok) {
-//     let { url } = data;
+  if (response.ok) {
+    let { url } = data;
+    const videoId = getVideoId(url);
+    url = `https://www.youtube.com/embed/${videoId}`;
+    trailerUrls.push({ title: movieTitle, url: url });
+    showTrailer(url);
+  } else {
+    console.error("Error:", data.error);
+    showTrailer("assets/video/404.mp4");
+  }
+}
 
-//     // Formatear la URL del video para obtener solo el ID del video
-//     const videoId = obtenerIdVideo(url);
+function showModal(movie) {
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
 
-//     // Construir la URL del video con el formato de incrustación de YouTube
-//     url = `https://www.youtube.com/embed/${videoId}`;
+  modalTitle.textContent = movie.title;
+  modalBody.innerHTML = `
+  <div class="col">
+  <div class="row">
+    <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-12 col-md-4 col-lg-5 col-xl-3 d-none d-md-block">
+      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img h-100">
+    </div> 
+    <div class="hover-overlay ripple ripple-surface ripple-surface-light col-12 col-md-8 col-lg-7 col-xl-9">
+      <div class="ratio ratio-16x9 embed-responsive embed-responsive-16by9 h-100" id="trailer-container"></div>
+    </div>
+  </div>
+</div>
+      </div>
+      <div class="card-body">
+        <ul class="list-unstyled list-inline mb-2">
+          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+        </ul>
+        <p class="card-text overview">${movie.overview}</p>
+      </div>
+    </div>`;
 
-//     // Actualizar el contenido del contenedor del trailer con el reproductor de video
-//     const trailerContainer = document.getElementById("trailer-container");
-//     trailerContainer.innerHTML = `<iframe width="100%" height="100%" src="${url}" frameborder="0" allowfullscreen></iframe>`;
+  const trailerContainer = document.getElementById("trailer-container");
+  const trailerUrl = trailerUrls.find(
+    (item) => item.title === movie.title
+  )?.url;
+  if (trailerUrl) {
+    trailerContainer.innerHTML = `<iframe "class=embed-responsive-item" width="100%" height="100%" src="${trailerUrl}" frameborder="0" allowfullscreen></iframe>`;
+  } else {
+    getTrailerByTitle(movie.title);
+  }
 
-//     // Si no encuentra el trailer muestra un video generico
-//     if (!url) {
-//       trailerContainer.innerHTML = `<iframe width="100%" height="100%" src="./video/404.mp4" frameborder="0" allowfullscreen></iframe>`;
-//     }
-//   } else {
-//     console.error("Error:", data.error);
-//   }
-// }
+  const movieModal = new bootstrap.Modal(document.getElementById("movieModal"));
+  movieModal.show();
 
-// function obtenerIdVideo(url) {
-//   const startIndex = url.indexOf("v=");
-//   if (startIndex !== -1) {
-//     let videoId = url.substring(startIndex + 2);
-//     const endIndex = videoId.indexOf("&");
-//     if (endIndex !== -1) {
-//       videoId = videoId.substring(0, endIndex);
-//     }
-//     return videoId;
-//   }
-//   return null;
-//}
+  //Agregar un evento para frenar la reproduccion del video cuando se cierra el modal:
+  movieModal._element.addEventListener("hidden.bs.modal", function () {
+    // Detener la reproducción del video
+    const trailerContainer = document.getElementById("trailer-container");
+    if (trailerContainer) {
+      const iframe = trailerContainer.querySelector("iframe");
+      if (iframe) {
+        // Detener el video estableciendo la URL del iframe como una cadena vacía
+        iframe.src = "";
+      }
+    }
+  });
+}
+
+function showTrailer(url) {
+  const trailerContainer = document.getElementById("trailer-container");
+  if (trailerContainer) {
+    // Vaciar el contenido actual del contenedor del trailer
+    trailerContainer.innerHTML = "";
+
+    // Crear un nuevo iframe con la URL actualizada
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("width", "100%");
+    iframe.setAttribute("height", "100%");
+    iframe.setAttribute("src", url);
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", "");
+
+    // Agregar el iframe al contenedor del trailer
+    trailerContainer.appendChild(iframe);
+  } else {
+    console.error("Trailer container not found.");
+  }
+}
+
+function getVideoId(url) {
+  const startIndex = url.indexOf("v=");
+  if (startIndex !== -1) {
+    let videoId = url.substring(startIndex + 2);
+    const endIndex = videoId.indexOf("&");
+    if (endIndex !== -1) {
+      videoId = videoId.substring(0, endIndex);
+    }
+    return videoId;
+  }
+  return null;
+}
+
+const estrenosUrl =
+  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc";
+const estrenosContainerId = "movie-container";
+
+fetchNewMovies(estrenosUrl, estrenosContainerId);
+
+const documentalesUrl =
+  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=99";
+const documentalesContainerId = "documentary-container";
+
+fetchNewMovies(documentalesUrl, documentalesContainerId);
+
+const animadasUrl =
+  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=16";
+const animadasContainerId = "animated-container";
+
+fetchNewMovies(animadasUrl, animadasContainerId);
