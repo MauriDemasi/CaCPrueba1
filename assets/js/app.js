@@ -85,7 +85,9 @@ function getMovieById(idMovie) {
 
 async function getTrailerByTitle(movieTitle) {
   const response = await fetch(
-    `http://localhost:3000/trailer/${encodeURIComponent(movieTitle)}+trailer`
+    `https://cacprueba1-qiv2.onrender.com:3000/trailer/${encodeURIComponent(
+      movieTitle
+    )}+trailer`
   );
   const data = await response.json();
 

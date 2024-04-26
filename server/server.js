@@ -3,7 +3,7 @@ const cors = require("cors");
 const fetch = require("node-fetch");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
@@ -29,6 +29,11 @@ app.get("/trailer/:title", async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+//ENDPOINT DE PRUEBA PARA POSTMAN
+app.get("/test", (req, res) => {
+  res.send("Hola mundo");
 });
 
 app.listen(PORT, () => {
