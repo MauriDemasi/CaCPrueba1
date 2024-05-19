@@ -4,3 +4,6 @@ node_modules/
 #Ignorar la carpeta .vscode
 
 .vscode/
+
+#Ignora el .env
+.env

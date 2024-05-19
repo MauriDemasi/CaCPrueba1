@@ -483,7 +483,8 @@ h6 {
   font-size: 24px;
 }
 
-#hero .btn-get-started {
+#hero .btn-get-started,
+.btn-close {
   font-family: "Raleway", sans-serif;
   font-weight: 500;
   font-size: 16px;
@@ -518,6 +519,38 @@ h6 {
   #hero h2 {
     font-size: 18px;
     line-height: 24px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Login Popup
+--------------------------------------------------------------*/
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #fccb90;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    #ee7724,
+    #d8363a,
+    #dd3675,
+    #b44593
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+@media (min-width: 768px) {
+  .gradient-form {
+    height: 100vh !important;
+  }
+}
+@media (min-width: 769px) {
+  .gradient-custom-2 {
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
   }
 }
 
@@ -1315,4 +1348,55 @@ section {
   #footer .credits {
     padding-top: 5px;
   }
+}
+
+/*--------------------------------------------------------------
+# Login Popup
+--------------------------------------------------------------*/
+#logo-form {
+  width: 25%;
+}
+
+#img-log {
+  background: url("../img/img-login.jpeg") top center;
+  background-size: cover;
+  position: relative;
+  margin-bottom: -70px;
+}
+
+#img-log:before {
+  content: "";
+  background: rgba(21, 5, 23, 0.5)
+    linear-gradient(
+      rgba(26, 0, 33, 0.5) 0%,
+      rgba(26, 0, 33, 0.5) 5%,
+      rgba(38, 6, 51, 0.5) 40%,
+      rgba(147, 47, 69, 0.7) 76%,
+      rgba(236, 97, 93, 0.7) 94%,
+      rgba(236, 97, 93, 0.5) 100%
+    )
+    repeat scroll 0% 0%;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+#form-container {
+  background-color: #343a40;
+}
+
+.btn-close {
+  width:1%
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* semi-transparente */
+  z-index: 1050; /* asegurar que esté por encima del modal */
 }

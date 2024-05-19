@@ -85,7 +85,9 @@ function getMovieById(idMovie) {
 
 async function getTrailerByTitle(movieTitle) {
   const response = await fetch(
-    `http://localhost:3000/trailer/${encodeURIComponent(movieTitle)}+trailer`
+    `https://cacprueba1-4lrw.onrender.com/trailer/${encodeURIComponent(
+      movieTitle
+    )}+trailer`
   );
   const data = await response.json();
 
@@ -208,3 +210,124 @@ const animadasUrl =
 const animadasContainerId = "animated-container";
 
 fetchNewMovies(animadasUrl, animadasContainerId);
+
+/*--------------------------------------------------------------
+# Login Popup
+--------------------------------------------------------------*/
+const modalLogin = document.getElementById("loginModal");
+
+function createModalLogin() {
+  // Crea el HTML del modal
+  modalLogin.innerHTML = `
+  <div class="container position-absolute top-50 start-50 translate-middle">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-12 "> 
+      <div class="card rounded-3 text-black border border-0">
+        <div class="row g-0">
+          <div class="col-md-6">
+            <div class="card-body p-md-5 mx-md-4">
+              <form>
+                <p class="text-center mb-4">Inicia Sesion para acceder al mejor contenido</p>
+                <div class="form-outline mb-4">
+                  <input type="email" id="form2Example11" class="form-control" placeholder="Usuario, Telefono o E-mail">
+                </div>
+                <div class="form-outline mb-4">
+                  <input type="password" id="form2Example22" class="form-control" placeholder="Password">
+                </div>
+                <div class="d-flex flex-column align-items-center mb-4">
+                  <button class="btn btn-outline-secondary btn-common" id="close-btn" type="button"onclick="login()" >Inicia Sesión</button>
+                </div>
+                <div class="d-flex flex-column align-items-center mb-4">
+                  <p>O puedes iniciar sesion usando:</p>
+                  <div>
+                    <a href="#" class="twitter"><i class="bx bxl-twitter fs-3 m-3"></i></a>
+                    <a href="#" class="facebook"><i class="bx bxl-facebook fs-3 m-3"></i></a>
+                    <a href="#" class="instagram"><i class="bx bxl-instagram fs-3 m-3"></i></a>
+                    <a href="#" class="google-plus"><i class="bx bxl-google fs-3 m-3"></i></a>
+                  </div>                
+                </div>
+                <p class="text-center mb-0"><a href="#">Olvidaste tu password?</a></p>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6 z-2" class="form-container">
+            <div class="d-flex align-items-center h-100" id="img-log">
+              <div class="px-3 py-4 p-md-5 mx-md-4 z-1 text-white" >
+              <div class="d-flex justify-content-end">
+              <div class="position-absolute top-0 end-0 mt-2 me-4">
+                <button class="btn btn-outline-secondary btn-close btn-common" id="close-btn" type="button"onclick="closeModal()" ></button>
+              </div>
+            </div>
+                <h4 class="mb-4">We are more than just a company</h4>
+                <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+              </div>
+            </div>
+          </div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ `;
+
+ //Creamos un div para cubrir el contenido del body
+  const overlay = document.createElement('div');
+  overlay.classList.add('modal-overlay')
+  document.body.appendChild(overlay);
+
+
+
+
+
+  // Muestra el modal utilizando Bootstrap
+  modalLogin.classList.add("show");
+  modalLogin.style.display = "block";
+
+}
+
+function closeModal() {
+  modalLogin.classList.remove("show");
+  modalLogin.style.display = "none";
+  
+  //Remover el overlay
+  const overlay = document.querySelector('.modal-overlay');
+  if (overlay){
+    document.body.removeChild(overlay);
+  }
+
+}
+
+function login() {
+  const url = "https://664a7f5fa300e8795d421f47.mockapi.io/api/v1/login";
+  const data = {
+    email: document.getElementById("form2Example11").value,
+    password: document.getElementById("form2Example22").value,
+  };
+
+  fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(users => {
+    if (users) {
+      const user = users.find(user => user.email === data.email && user.password === data.password);
+      if (user) {
+        alert('Sesión iniciada con éxito');
+        closeModal();
+      } else {
+        alert('Error: credenciales incorrectas');
+      }
+    } else {
+      alert('Error: respuesta inesperada del servidor');
+    }
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+    alert('Error de red o respuesta no válida');
+  });
+}
+
