@@ -250,7 +250,7 @@ function createModalLogin() {
               </form>
             </div>
           </div>
-          <div class="col-md-6 z-2" class="form-container">
+          <div class="col-md-6 z-2 d-none d-sm-block" class="form-container">
             <div class="d-flex align-items-center h-100" id="img-log">
               <div class="px-3 py-4 p-md-5 mx-md-4 z-1 text-white" >
               <div class="d-flex justify-content-end">
@@ -258,8 +258,13 @@ function createModalLogin() {
                 <button class="btn btn-outline-secondary btn-close btn-common" id="close-btn" type="button"onclick="closeModal()" ></button>
               </div>
             </div>
-                <h4 class="mb-4">We are more than just a company</h4>
-                <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <h4 class="mb-4">Un solo lugar, todo el contenido</h4>
+                <p class="small mb-0">Queremos que todo el cine este en tu mano. Con tu celu, con tu tablet o tu compu
+                puedas disfrutar de los mejores titulos, los actuales, los clásicos o lo que se te ocurra.
+                </p>
+                  <h4 class="m-5">
+                    BROWSER LIVE SERVER El servicio que te hace vivir el momento.
+                  </h4>
               </div>
             </div>
           </div>
@@ -271,31 +276,25 @@ function createModalLogin() {
 
  `;
 
- //Creamos un div para cubrir el contenido del body
-  const overlay = document.createElement('div');
-  overlay.classList.add('modal-overlay')
+  //Creamos un div para cubrir el contenido del body
+  const overlay = document.createElement("div");
+  overlay.classList.add("modal-overlay");
   document.body.appendChild(overlay);
-
-
-
-
 
   // Muestra el modal utilizando Bootstrap
   modalLogin.classList.add("show");
   modalLogin.style.display = "block";
-
 }
 
 function closeModal() {
   modalLogin.classList.remove("show");
   modalLogin.style.display = "none";
-  
+
   //Remover el overlay
-  const overlay = document.querySelector('.modal-overlay');
-  if (overlay){
+  const overlay = document.querySelector(".modal-overlay");
+  if (overlay) {
     document.body.removeChild(overlay);
   }
-
 }
 
 function login() {
@@ -306,28 +305,29 @@ function login() {
   };
 
   fetch(url)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(users => {
-    if (users) {
-      const user = users.find(user => user.email === data.email && user.password === data.password);
-      if (user) {
-        alert('Sesión iniciada con éxito');
-        closeModal();
-      } else {
-        alert('Error: credenciales incorrectas');
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    } else {
-      alert('Error: respuesta inesperada del servidor');
-    }
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-    alert('Error de red o respuesta no válida');
-  });
+      return response.json();
+    })
+    .then((users) => {
+      if (users) {
+        const user = users.find(
+          (user) => user.email === data.email && user.password === data.password
+        );
+        if (user) {
+          alert("Sesión iniciada con éxito");
+          closeModal();
+        } else {
+          alert("Error: credenciales incorrectas");
+        }
+      } else {
+        alert("Error: respuesta inesperada del servidor");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Error de red o respuesta no válida");
+    });
 }
-
