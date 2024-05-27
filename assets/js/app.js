@@ -16,6 +16,47 @@ let idMovie;
 
 // Variable para almacenar el titulo de la pelicula y usar este valor como parametro para la funcion que busca por youtube
 let movieTitle;
+/*
+//Fetchear datos de la API
+
+async function fetchData() {
+    try {
+        const response = await fetch('"https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc"');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetcheando data:', error);
+    }
+}
+
+//Renderizar la data de la API en estilo del sitio
+
+async function renderData() {
+    const container = document.querySelector('.container');
+    const data = await fetchData();
+
+    if (!data) {
+        return;
+    }
+
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        const title = document.createElement('h2');
+        title.textContent = item.title;
+
+        const body = document.createElement('p');
+        body.textContent = item.body;
+
+        card.appendChild(title);
+        card.appendChild(body);
+        container.appendChild(card);
+    });
+}
+
+// Mostrar Data
+renderData();*/
 
 // Hacer la solicitud a la API para obtener las películas estreno
 fetch(
