@@ -2,8 +2,7 @@ const options = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YzI1ZWJhMWQxYTM1OWUxYzRiMjZhOGM4ZGIzMzlmNyIsInN1YiI6IjY2MTkyOGYyYjlhMGJkMDE3YzExOGY4YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.jCNSUsqC_CQyv0dd2N3kT7OFl54WuHWR9dlmQ2iTOag",
+    Authorization: `Bearer ${process.env.BEARER_TOKEN}`
   },
 };
 
@@ -26,9 +25,12 @@ function fetchNewMovies(apiUrl, containerId) {
       data.results.forEach((movie, index) => {
         const handleClick = () => {
           getMovieById(movie.id);
+
+          // Comprobar si ya existe la URL del trailer en trailerUrls
           const trailerIndex = trailerUrls.findIndex(
             (item) => item.title === movie.title
           );
+
           if (trailerIndex !== -1) {
             const trailerUrl = trailerUrls[trailerIndex].url;
             showTrailer(trailerUrl);
@@ -85,7 +87,7 @@ function getMovieById(idMovie) {
 
 async function getTrailerByTitle(movieTitle) {
   const response = await fetch(
-    `https://cacprueba1-4lrw.onrender.com/trailer/${encodeURIComponent(
+    `https://cacprueba1-gb3i.onrender.com/trailer/${encodeURIComponent(
       movieTitle
     )}+trailer`
   );
@@ -110,34 +112,33 @@ function showModal(movie) {
   modalTitle.textContent = movie.title;
   modalBody.innerHTML = `
   <div class="col">
-  <div class="row">
-    <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-12 col-md-4 col-lg-5 col-xl-3 d-none d-md-block">
-      <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img h-100">
-    </div> 
-    <div class="hover-overlay ripple ripple-surface ripple-surface-light col-12 col-md-8 col-lg-7 col-xl-9">
-      <div class="ratio ratio-16x9 embed-responsive embed-responsive-16by9 h-100" id="trailer-container"></div>
+    <div class="row">
+      <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light col-12 col-md-4 col-lg-5 col-xl-3 d-none d-md-block">
+        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img h-100">
+      </div> 
+      <div class="hover-overlay ripple ripple-surface ripple-surface-light col-12 col-md-8 col-lg-7 col-xl-9">
+        <div class="ratio ratio-16x9 embed-responsive embed-responsive-16by9 h-100" id="trailer-container"></div>
+      </div>
     </div>
   </div>
-</div>
-      </div>
-      <div class="card-body">
-        <ul class="list-unstyled list-inline mb-2">
-          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
-          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
-          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
-          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
-          <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
-        </ul>
-        <p class="card-text overview">${movie.overview}</p>
-      </div>
-    </div>`;
+  <div class="card-body">
+    <ul class="list-unstyled list-inline mb-2">
+      <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+      <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+      <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+      <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+      <li class="list-inline-item me-0"><i class="fas fa-star text-warning fa-xs"></i></li>
+    </ul>
+    <p class="card-text overview">${movie.overview}</p>
+  </div>`;
 
   const trailerContainer = document.getElementById("trailer-container");
   const trailerUrl = trailerUrls.find(
     (item) => item.title === movie.title
   )?.url;
+
   if (trailerUrl) {
-    trailerContainer.innerHTML = `<iframe "class=embed-responsive-item" width="100%" height="100%" src="${trailerUrl}" frameborder="0" allowfullscreen></iframe>`;
+    trailerContainer.innerHTML = `<iframe class="embed-responsive-item" width="100%" height="100%" src="${trailerUrl}" frameborder="0" allowfullscreen></iframe>`;
   } else {
     getTrailerByTitle(movie.title);
   }
@@ -145,14 +146,12 @@ function showModal(movie) {
   const movieModal = new bootstrap.Modal(document.getElementById("movieModal"));
   movieModal.show();
 
-  //Agregar un evento para frenar la reproduccion del video cuando se cierra el modal:
+  // Detener el video cuando el modal se cierra
   movieModal._element.addEventListener("hidden.bs.modal", function () {
-    // Detener la reproducción del video
     const trailerContainer = document.getElementById("trailer-container");
     if (trailerContainer) {
       const iframe = trailerContainer.querySelector("iframe");
       if (iframe) {
-        // Detener el video estableciendo la URL del iframe como una cadena vacía
         iframe.src = "";
       }
     }
@@ -162,10 +161,8 @@ function showModal(movie) {
 function showTrailer(url) {
   const trailerContainer = document.getElementById("trailer-container");
   if (trailerContainer) {
-    // Vaciar el contenido actual del contenedor del trailer
     trailerContainer.innerHTML = "";
 
-    // Crear un nuevo iframe con la URL actualizada
     const iframe = document.createElement("iframe");
     iframe.setAttribute("width", "100%");
     iframe.setAttribute("height", "100%");
@@ -173,7 +170,6 @@ function showTrailer(url) {
     iframe.setAttribute("frameborder", "0");
     iframe.setAttribute("allowfullscreen", "");
 
-    // Agregar el iframe al contenedor del trailer
     trailerContainer.appendChild(iframe);
   } else {
     console.error("Trailer container not found.");
@@ -193,20 +189,12 @@ function getVideoId(url) {
   return null;
 }
 
-const estrenosUrl =
-  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc";
-const estrenosContainerId = "movie-container";
+// Cargar los estrenos y otros géneros
+const estrenosUrl = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc";
+fetchNewMovies(estrenosUrl, "movie-container");
 
-fetchNewMovies(estrenosUrl, estrenosContainerId);
+const documentalesUrl = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=99";
+fetchNewMovies(documentalesUrl, "documentary-container");
 
-const documentalesUrl =
-  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=99";
-const documentalesContainerId = "documentary-container";
-
-fetchNewMovies(documentalesUrl, documentalesContainerId);
-
-const animadasUrl =
-  "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=16";
-const animadasContainerId = "animated-container";
-
-fetchNewMovies(animadasUrl, animadasContainerId);
+const animadasUrl = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=es-AR&page=1&sort_by=popularity.desc&with_genres=16";
+fetchNewMovies(animadasUrl, "animated-container");
