@@ -1,37 +1,48 @@
 const express = require("express");
 const cors = require("cors");
-const fetch = require("node-fetch");
-const dotenv = require("dotenv");
-
-dotenv.config();
+const puppeteer = require("puppeteer"); // Importa Puppeteer
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
-// Endpoint para obtener trailer por título
 app.get("/trailer/:title", async (req, res) => {
   const { title } = req.params;
-  const url = `https://aiotube.deta.dev/search/video/${encodeURIComponent(title)}`;
-
+  
   try {
-    const response = await fetch(url);
-    const result = await response.json();
+    // Llama a la función para obtener el trailer de YouTube
+    const trailerUrl = await getTrailerFromYouTube(title);
 
-    // Verificar si la respuesta contiene la URL del trailer
-    if (result && result.url) {
-      res.json({ url: result.url });
-      console.log(`Trailer found: ${result.url}`);
+    if (trailerUrl) {
+      res.json({ url: trailerUrl });
     } else {
       res.status(404).json({ error: "Trailer not found" });
-      console.log("Trailer not found");
     }
   } catch (error) {
-    console.error(`Error fetching trailer: ${error}`);
+    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+// Función que obtiene el trailer de YouTube a través de Puppeteer
+async function getTrailerFromYouTube(movieTitle) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  // Navega a YouTube y realiza la búsqueda
+  await page.goto(`https://www.youtube.com/results?search_query=${encodeURIComponent(movieTitle)}+trailer`);
+  
+  // Extrae la URL del primer video de la lista de resultados
+  const trailerUrl = await page.evaluate(() => {
+    const firstVideo = document.querySelector('a#video-title');
+    return firstVideo ? `https://www.youtube.com${firstVideo.getAttribute('href')}` : null;
+  });
+
+  await browser.close();
+
+  return trailerUrl;
+}
 
 // Endpoint de prueba
 app.get("/test", (req, res) => {
